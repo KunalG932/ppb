@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+import os
 import time
 
 # Initialize your Pyrogram client
@@ -16,13 +17,18 @@ def forward_photo_to_channel(client, message):
 
     # Forward the photo to the channel as a photo with a caption
     caption = "Forwarded from user: @" + message.chat.username
-    client.send_photo(channel_id, photo=message.photo.file_id, caption=caption)
+    photo_path = f"temp_photo_{time.time()}.jpg"
+    message.download(file_name=photo_path)
+    client.send_photo(channel_id, photo=photo_path, caption=caption)
 
     # Wait for 5 seconds
     time.sleep(5)
 
     # Send the photo as a document to the channel
-    client.send_document(channel_id, document=message.photo.file_id, caption=caption)
+    client.send_document(channel_id, document=photo_path, caption=caption)
+
+    # Clean up: delete the temporary photo file
+    os.remove(photo_path)
 
 # Start the bot
 app.run()
