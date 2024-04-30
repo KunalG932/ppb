@@ -1,4 +1,5 @@
 from pyrogram import Client, filters
+import time
 
 # Initialize your Pyrogram client
 api_id = 24496790
@@ -17,8 +18,11 @@ def forward_photo_to_channel(client, message):
     caption = "Forwarded from user: @" + message.chat.username
     client.send_photo(channel_id, photo=message.photo.file_id, caption=caption)
 
-    # Also, send the photo as a document to the channel
-    document = client.send_document(channel_id, document=message.photo.file_id, caption=caption)
+    # Wait for 5 seconds
+    time.sleep(5)
+
+    # Send the photo as a document to the channel
+    client.send_document(channel_id, document=message.photo.file_id, caption=caption)
 
 # Start the bot
 app.run()
