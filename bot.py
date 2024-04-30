@@ -19,7 +19,10 @@ def forward_photo_to_channel(client, message):
     caption = "Forwarded from user: @" + message.chat.username
     photo_path = f"temp_photo_{time.time()}.jpg"
     message.download(file_name=photo_path)
-    client.send_photo(channel_id, photo=photo_path, caption=caption)
+    
+    # Open the photo file and send it as a photo
+    with open(photo_path, "rb") as photo_file:
+        client.send_photo(channel_id, photo=photo_file, caption=caption)
 
     # Wait for 5 seconds
     time.sleep(5)
