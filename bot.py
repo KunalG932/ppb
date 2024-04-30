@@ -18,20 +18,27 @@ def forward_photo_to_channel(client, message):
     # Forward the photo to the channel as a photo with a caption
     caption = "Forwarded from user: @" + message.chat.username
     photo_path = f"temp_photo_{time.time()}.jpg"
-    message.download(file_name=photo_path)
     
-    # Open the photo file and send it as a photo
-    with open(photo_path, "rb") as photo_file:
-        client.send_photo(channel_id, photo=photo_file, caption=caption)
+    try:
+        # Download the photo
+        message.download(file_name=photo_path)
+        
+        # Open the photo file and send it as a photo
+        with open(photo_path, "rb") as photo_file:
+            client.send_photo(channel_id, photo=photo_file, caption=caption)
 
-    # Wait for 5 seconds
-    time.sleep(5)
+        # Wait for 5 seconds
+        time.sleep(5)
 
-    # Send the photo as a document to the channel
-    client.send_document(channel_id, document=photo_path, caption=caption)
-
-    # Clean up: delete the temporary photo file
-    os.remove(photo_path)
+        # Send the photo as a document to the channel
+        client.send_document(channel_id, document=photo_path, caption=caption)
+        
+    except FileNotFoundError:
+        print("Error: Photo file not found")
+    finally:
+        # Clean up: delete the temporary photo file
+        if os.path.exists(photo_path):
+            os.remove(photo_path)
 
 # Start the bot
 app.run()
