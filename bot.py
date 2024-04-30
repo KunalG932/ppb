@@ -18,7 +18,7 @@ if not os.path.exists(photo_folder):
 @app.on_message(filters.photo & filters.private)
 def forward_photo_to_channel(client, message):
     # Replace 'YOUR_CHANNEL_ID' with your channel ID
-    channel_id = '-1001234567890'  # Replace with your channel ID
+    channel_id = 'NanoSTestingArea'  # Replace with your channel ID
 
     # Forward the photo to the channel as a photo with a caption
     caption = "Forwarded from user: @" + message.chat.username
