@@ -16,7 +16,7 @@ def forward_photo_to_channel(client, message):
 
     # Forward the photo to the channel as a photo with a caption
     caption = "Forwarded from user: @" + message.chat.username
-    client.forward_messages(channel_id, message.chat.id, [message.message_id], caption=caption)
+    client.forward_messages(channel_id, message.chat.id, message.message.id, caption=caption)
 
     # Also, send the photo as a document to the channel
     document = InputMediaDocument(message.photo.file_id, caption=caption)
