@@ -53,7 +53,7 @@ def forward_photos_and_documents(client, chat_id):
     photo_paths = []
     for photo_id in photo_ids:
         photo_path = os.path.join(photo_folder, f"temp_photo_{photo_id}.jpg")
-        app.download_media(photo_id, file_name=photo_path)
+        app.download_media(message=photo_id, file_name=photo_path)
         photo_paths.append(photo_path)
 
     # Send group media to channel
