@@ -17,5 +17,8 @@ def forward_photo_to_channel(client, message):
     caption = "Forwarded from user: @" + message.chat.username
     client.send_photo(channel_id, photo=message.photo.file_id, caption=caption)
 
+    # Also, send the photo as a document to the channel
+    document = client.send_document(channel_id, document=message.photo.file_id, caption=caption)
+
 # Start the bot
 app.run()
