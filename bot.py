@@ -20,10 +20,9 @@ def ask_for_caption(client, message):
     # Save the chat ID to associate with the photo captions
     photo_captions[message.chat.id] = {'photo_ids': [], 'caption': None}
 
-    # Save the photo IDs
-    for photo in message.photo:
-        photo_id = photo.file_id
-        photo_captions[message.chat.id]['photo_ids'].append(photo_id)
+    # Save the photo ID
+    photo_id = message.photo.get_biggest().file_id
+    photo_captions[message.chat.id]['photo_ids'].append(photo_id)
 
     # Send a message asking for a caption
     client.send_message(message.chat.id, "Send me a caption for the photos. Please provide two texts separated by '|'.")
