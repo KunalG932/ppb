@@ -37,16 +37,19 @@ def start(client, message):
 @app.on_message(filters.private)
 def handle_private_message(client, message):
     chat_id = message.chat.id
-    text = message.text.lower()
-    if text == "single photo":
-        # Send a message asking for a photo
-        app.send_message(chat_id, "Send me a photo.")
-    elif text == "double photo":
-        forward_photos(client, chat_id, 2)
-    elif text == "triple photo":
-        forward_photos(client, chat_id, 3)
-    elif text == "group photo":
-        forward_photos(client, chat_id, 4)
+    if message.text:
+        text = message.text.lower()
+        if text == "single photo":
+            # Send a message asking for a photo
+            app.send_message(chat_id, "Send me a photo.")
+        elif text == "double photo":
+            forward_photos(client, chat_id, 2)
+        elif text == "triple photo":
+            forward_photos(client, chat_id, 3)
+        elif text == "group photo":
+            forward_photos(client, chat_id, 4)
+        else:
+            send_keyboard_message(chat_id)
     else:
         send_keyboard_message(chat_id)
 
