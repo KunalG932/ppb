@@ -4,7 +4,7 @@ import time
 
 api_id = 24496790
 api_hash = '95a711fc46d4293b7b419b9b6389b703'
-bot_token = '6737395815:AAEEwe2nPsdfUQfPSqCziRwEY8SRyn75wEw'
+bot_token = '7038639427:AAEPN0kz8qjQklDdSXY-G5UWJqn5uTFzBL8'
 
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
