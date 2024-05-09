@@ -4,7 +4,7 @@ import time
 
 api_id = 24496790
 api_hash = '95a711fc46d4293b7b419b9b6389b703'
-bot_token = '6728814239:AAFlWCe4xs9Yt8BoZjGUMgxRkMBdlZglndc'
+bot_token = '6737395815:AAEEwe2nPsdfUQfPSqCziRwEY8SRyn75wEw'
 
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
@@ -26,23 +26,29 @@ def ask_for_caption(client, message):
         photo_captions[message.chat.id]['photo_ids'].append(photo_id)
 
     # Send a message asking for a caption
-    client.send_message(message.chat.id, "Send me a caption for the photos.")
+    client.send_message(message.chat.id, "Send me a caption for the photos. Please provide two texts separated by '|'.")
 
 @app.on_message(filters.text & filters.private)
 def handle_caption(client, message):
     chat_id = message.chat.id
     if chat_id in photo_captions:
         if photo_captions[chat_id]['caption'] is None:
-            # Associate the caption with the chat ID
-            photo_captions[chat_id]['caption'] = message.text
+            # Split the caption into two parts
+            caption_parts = message.text.split('|')
+            if len(caption_parts) == 2:
+                # Associate the caption with the chat ID
+                photo_captions[chat_id]['caption'] = f"💎≻───「ᴘʀᴇᴠɪᴇᴡ」───\n├ ⚝ #{caption_parts[0].strip()}\n├ ⚝ #{caption_parts[1].strip()}\n╰──❯ ❲@Silverwing_Den❳"
 
-            # Forward the photos and documents to the channel with the provided caption
-            forward_photos_and_documents(client, chat_id)
+                # Forward the photos to the channel with the provided caption
+                forward_photos(client, chat_id)
 
-            # Clean up the dictionary entry
-            del photo_captions[chat_id]
+                # Clean up the dictionary entry
+                del photo_captions[chat_id]
+            else:
+                # If the format is incorrect, ask the user to resend the caption
+                client.send_message(chat_id, "Please provide the caption in the correct format. Two texts separated by '|'.")
 
-def forward_photos_and_documents(client, chat_id):
+def forward_photos(client, chat_id):
     channel_id = 'NanoSTestingArea'
     caption = f"Forwarded from user: @{app.get_me().username}\n\n{photo_captions[chat_id]['caption']}"
 
@@ -56,20 +62,10 @@ def forward_photos_and_documents(client, chat_id):
         app.download_media(message=photo_id, file_name=photo_path)
         photo_paths.append(photo_path)
 
-    # Send group media to channel
-    media_group = []
+    # Send photos to channel with the caption
     for photo_path in photo_paths:
         with open(photo_path, "rb") as photo_file:
-            media_group.append({"type": "photo", "media": photo_file})
-    client.send_media_group(channel_id, media=media_group, caption=caption)
-
-    # Wait for a short time to avoid rate limits
-    time.sleep(2)
-
-    # Send documents to channel one by one
-    for photo_path in photo_paths:
-        with open(photo_path, "rb") as document_file:
-            client.send_document(channel_id, document=document_file, caption=caption)
+            client.send_photo(channel_id, photo=photo_file, caption=caption)
 
     # Clean up: delete the temporary photo files
     for photo_path in photo_paths:
