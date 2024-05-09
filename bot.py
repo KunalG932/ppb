@@ -60,7 +60,7 @@ def handle_caption(client, message):
 
 def forward_photos(client, chat_id):
     channel_id = 'NanoSTestingArea'
-    caption = f"Forwarded from user: @{app.get_me().username}\n\n{photo_captions[chat_id]['caption']}"
+    caption = f"{photo_captions[chat_id]['caption']}"
 
     # Get photo IDs and caption from the dictionary
     photo_ids = photo_captions[chat_id]['photo_ids']
